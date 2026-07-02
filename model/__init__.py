@@ -5,6 +5,7 @@ from .base_model import (
     get_device,
 )
 from .memvit import MemViT
+from .timesformer import TimeSformer
 
 from .model_factory import configure_model
 
@@ -17,6 +18,7 @@ __all__ = [
     'ClassificationBaseModel',
     'get_device',
     'MemViT',
+    'TimeSformer',
     'configure_model',
     'SimpleLightningModel',
 ]

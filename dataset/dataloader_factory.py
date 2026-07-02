@@ -6,10 +6,6 @@ from pathlib import Path
 from torch.utils.data import DataLoader
 
 from dataset import (
-    image_folder,
-    ImageFolderInfo,
-    video_folder,
-    VideoFolderInfo,
     sequential_video_folder,
     epic_kitchens_sequential_data_folder,
     EpicKitchensSequentialDataFolderInfo,
@@ -144,32 +140,32 @@ def configure_dataloader(
     _maybe_assign_default_memvit_cfg(args, dataset_name)
 
     if dataset_name == "ImageFolder":
-        train_transform, val_transform =             transform_image(TransformImageInfo())
-        train_loader, val_loader, n_classes =             image_folder(ImageFolderInfo(
-                root=args.root,
-                train_dir=args.train_dir,
-                val_dir=args.val_dir,
-                batch_size=args.batch_size,
-                num_workers=args.num_workers,
-                train_transform=train_transform,
-                val_transform=val_transform
-            ))
+        train_transform, val_transform = transform_image(TransformImageInfo())
+        train_loader, val_loader, n_classes = image_folder(ImageFolderInfo(
+            root=args.root,
+            train_dir=args.train_dir,
+            val_dir=args.val_dir,
+            batch_size=args.batch_size,
+            num_workers=args.num_workers,
+            train_transform=train_transform,
+            val_transform=val_transform
+        ))
 
     elif dataset_name == "VideoFolder":
-        train_transform, val_transform =             transform_video(TransformVideoInfo(
-                frames_per_clip=args.frames_per_clip
-            ))
-        train_loader, val_loader, n_classes =             video_folder(VideoFolderInfo(
-                root=args.root,
-                train_dir=args.train_dir,
-                val_dir=args.val_dir,
-                batch_size=args.batch_size,
-                num_workers=args.num_workers,
-                train_transform=train_transform,
-                val_transform=val_transform,
-                clip_duration=args.clip_duration,
-                clips_per_video=args.clips_per_video
-            ))
+        train_transform, val_transform = transform_video(TransformVideoInfo(
+            frames_per_clip=args.frames_per_clip
+        ))
+        train_loader, val_loader, n_classes = video_folder(VideoFolderInfo(
+            root=args.root,
+            train_dir=args.train_dir,
+            val_dir=args.val_dir,
+            batch_size=args.batch_size,
+            num_workers=args.num_workers,
+            train_transform=train_transform,
+            val_transform=val_transform,
+            clip_duration=args.clip_duration,
+            clips_per_video=args.clips_per_video
+        ))
 
     elif dataset_name == "SequentialVideoFolder":
         train_loader, val_loader, n_classes = sequential_video_folder(
@@ -189,29 +185,29 @@ def configure_dataloader(
         )
 
     elif dataset_name == "EpicKitchenSequentialDataset":
-        train_transform, val_transform =             build_sequential_video_transform(TransformVideoInfo(
-                frames_per_clip=args.frames_per_clip
+        train_transform, val_transform = build_sequential_video_transform(TransformVideoInfo(
+            frames_per_clip=args.frames_per_clip
+        ))
+        train_loader, val_loader, n_classes = epic_kitchens_sequential_data_folder(
+            EpicKitchensSequentialDataFolderInfo(
+                root=args.root,
+                train_dir=args.train_dir,
+                val_dir=args.val_dir,
+                batch_size=args.batch_size,
+                num_workers=args.num_workers,
+                train_transform=train_transform,
+                val_transform=val_transform,
+                clip_duration=args.clip_duration,
+                video_edge_time=args.video_edge_time,
+                ext=args.ext,
+                frames_per_clip=args.frames_per_clip,
+                task=args.epic_task,
+                train_annotation_path=args.train_annotation_path,
+                val_annotation_path=args.val_annotation_path,
+                label_type=args.epic_label_type,
+                background_label=args.background_label,
+                anticipation_time=args.epic_anticipation_time,
             ))
-        train_loader, val_loader, n_classes =             epic_kitchens_sequential_data_folder(
-                EpicKitchensSequentialDataFolderInfo(
-                    root=args.root,
-                    train_dir=args.train_dir,
-                    val_dir=args.val_dir,
-                    batch_size=args.batch_size,
-                    num_workers=args.num_workers,
-                    train_transform=train_transform,
-                    val_transform=val_transform,
-                    clip_duration=args.clip_duration,
-                    video_edge_time=args.video_edge_time,
-                    ext=args.ext,
-                    frames_per_clip=args.frames_per_clip,
-                    task=args.epic_task,
-                    train_annotation_path=args.train_annotation_path,
-                    val_annotation_path=args.val_annotation_path,
-                    label_type=args.epic_label_type,
-                    background_label=args.background_label,
-                    anticipation_time=args.epic_anticipation_time,
-                ))
 
     elif dataset_name == "Salads50SequentialDataset":
         salads_root = _infer_salads50_root(args)
@@ -253,34 +249,34 @@ def configure_dataloader(
 
         ext = _infer_salads50_ext(salads_root, args.ext)
 
-        train_transform, val_transform =             build_sequential_video_transform(TransformVideoInfo(
-                frames_per_clip=args.frames_per_clip
+        train_transform, val_transform = build_sequential_video_transform(TransformVideoInfo(
+            frames_per_clip=args.frames_per_clip
+        ))
+        train_loader, val_loader, n_classes = salads50_sequential_data_folder(
+            Salads50SequentialDataFolderInfo(
+                root=args.root,
+                train_dir=train_dir,
+                val_dir=val_dir,
+                batch_size=args.batch_size,
+                num_workers=args.num_workers,
+                train_transform=train_transform,
+                val_transform=val_transform,
+                clip_duration=args.clip_duration,
+                video_edge_time=args.video_edge_time,
+                ext=ext,
+                annotation_root=str(annotation_root_path),
+                split_root=str(split_root_path),
+                train_annotation_root=train_annotation_root_path,
+                val_annotation_root=val_annotation_root_path,
+                train_split_root=train_split_root_path,
+                val_split_root=val_split_root_path,
+                split_id=args.split_id,
+                label_granularity=args.label_granularity,
+                label_map_path=args.label_map_path,
+                background_label=args.background_label,
+                max_train_clips_per_video=args.max_train_clips_per_video,
+                frames_per_clip=args.frames_per_clip,
             ))
-        train_loader, val_loader, n_classes =             salads50_sequential_data_folder(
-                Salads50SequentialDataFolderInfo(
-                    root=args.root,
-                    train_dir=train_dir,
-                    val_dir=val_dir,
-                    batch_size=args.batch_size,
-                    num_workers=args.num_workers,
-                    train_transform=train_transform,
-                    val_transform=val_transform,
-                    clip_duration=args.clip_duration,
-                    video_edge_time=args.video_edge_time,
-                    ext=ext,
-                    annotation_root=str(annotation_root_path),
-                    split_root=str(split_root_path),
-                    train_annotation_root=train_annotation_root_path,
-                    val_annotation_root=val_annotation_root_path,
-                    train_split_root=train_split_root_path,
-                    val_split_root=val_split_root_path,
-                    split_id=args.split_id,
-                    label_granularity=args.label_granularity,
-                    label_map_path=args.label_map_path,
-                    background_label=args.background_label,
-                    max_train_clips_per_video=args.max_train_clips_per_video,
-                    frames_per_clip=args.frames_per_clip,
-                ))
 
     else:
         raise ValueError("invalid dataset_name")

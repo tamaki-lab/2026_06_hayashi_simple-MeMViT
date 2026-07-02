@@ -206,8 +206,8 @@ class ArgParse:
             "-m",
             "--model_name",
             type=str,
-            default="resnet18",
-            choices=["resnet18", "resnet50", "x3d", "abn_r50", "vit_b", "memvit", "zero_output_dummy"],
+            default="memvit",
+            choices=["memvit", "timesformer"],
             help="name of the model",
         )
 

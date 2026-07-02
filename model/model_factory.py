@@ -2,6 +2,8 @@ from model import (
     ClassificationBaseModel,
     ModelConfig,
     MemViT,
+    TimeSformer,
+
 )
 
 
@@ -21,10 +23,10 @@ def configure_model(
     """
 
     model_name = model_info.model_name
-    if model_name == 'vit_b':
-        model_name = 'memvit'
+    if model_name == 'timesformer':
+        model = TimeSformer(model_info.cfg)  # type: ignore[assignment]
 
-    if model_name == 'memvit':
+    elif model_name == 'memvit':
         model = MemViT(model_info.cfg)  # type: ignore[assignment]
 
     else:

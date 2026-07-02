@@ -372,5 +372,43 @@
                 "0"
             ]
         },
+        {
+            "name": "Train 50salads frame timesformer1GPU",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main_pl.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "2"
+            },
+            "justMyCode": false,
+            "args": [
+                "-d",
+                "Salads50SequentialDataset",
+                "-td",
+                "/mnt/HDD10TB-2/ishikawa/2026_04_ishikawa_simple-MeMViT/data/50Salads/rgb",
+                "-vd",
+                "/mnt/HDD10TB-2/ishikawa/2026_04_ishikawa_simple-MeMViT/data/50Salads/rgb",
+                "--sequential_label_mode",
+                "frame",
+                "-m",
+                "timesformer",
+                "--frames_per_clip",
+                "16",
+                "-b",
+                "2",
+                "-w",
+                "4",
+                "-e",
+                "10",
+                "--optimizer_name",
+                "OrthogonalAdamW",
+                "--log_interval_steps",
+                "10",
+                "--devices",
+                "0"
+            ]
+        },
     ]
 }
